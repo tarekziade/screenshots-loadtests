@@ -1,4 +1,6 @@
-# PageShot Load Tests
+# Page Shot Load Tests
+
+Async [**Page Shot**](https://github.com/mozilla-services/pageshot) load tests using [**molotov**](https://github.com/loads/molotov).
 
 ## Requirements:
 

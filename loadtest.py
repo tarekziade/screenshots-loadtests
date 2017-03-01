@@ -75,12 +75,9 @@ async def create_shot(session):
     #     assert 'user' in body
 
     shot_id = make_uuid() + "/test.com"
-    shot_url = urljoin(SERVER_URL, shot_id)
-    shot_data = urljoin(SERVER_URL, "data/" + shot_id)
+    path_pageshot = urljoin(SERVER_URL, "data/" + shot_id)
     resp = make_example_shot()
 
-    async with session.put(shot_data, json=resp) as r:
+    async with session.put(path_pageshot, json=resp) as r:
         body = await r.json()
         print(body)
-
-    # resp.raise_for_status()
