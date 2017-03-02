@@ -74,10 +74,16 @@ async def create_shot(session):
     #     body = await r.json()
     #     assert 'user' in body
 
-    shot_id = make_uuid() + "/test.com"
-    path_pageshot = urljoin(SERVER_URL, "data/" + shot_id)
-    resp = make_example_shot()
+    path_pageshot = urljoin(SERVER_URL, "data/" + make_uuid() + "/test.com")
+    data = make_example_shot()
 
-    async with session.put(path_pageshot, json=resp) as r:
-        body = await r.json()
-        print(body)
+    headers = {'Content-Type': 'application/json', 'Accept': 'text/plain'}
+
+    try:
+        async with session.put(path_pageshot, data=data, headers=headers) as r:
+            body = await r.json()
+            print(body)
+    except Exception as exc:
+        print(exc)
+    else:
+        print('¯\_(ツ)_/¯')
