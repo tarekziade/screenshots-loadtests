@@ -19,5 +19,5 @@ $ pip install -r requirements.txt
 ```sh
 $ molotov -h
 
-$ molotov -c -v -s create_shot
+$ molotov -cvv --max-runs 1
 ```
