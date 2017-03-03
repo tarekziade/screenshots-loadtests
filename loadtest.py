@@ -4,7 +4,11 @@ import random
 import time
 import uuid
 from urllib.parse import urljoin
-from molotov import scenario, global_setup, global_teardown
+
+from molotov import scenario, global_setup, global_teardown, setup
+from aiohttp import ClientSession
+import asyncio
+
 
 # Read configuration from env
 SERVER_URL = os.getenv(
@@ -26,8 +30,8 @@ def make_uuid():
 def make_device_info():
     return dict(
         addonVersion='0.1.2014test',
-        platform='test',
-    )
+        platform='test')
+
 
 deviceInfo = make_device_info()
 deviceId = make_uuid()
@@ -72,45 +76,71 @@ def make_example_shot():
         },
     )
 
-text_strings = """
-Example strings like apple orange banana some stuff like whatever and whoever and bucket blanket funky etc keyboard screen house window tree leaf leaves feather feathers
-""".split()
+
+text_strings = """\
+Example strings like apple orange banana some stuff like whatever and whoever
+ and bucket blanket funky etc keyboard screen house window tree leaf leaves
+ feather feathers""".split()
+
+
+_COOKIES = None
 
 
 @global_setup()
 def login(args):
-    print("Kenny Loggins")
+    global _COOKIES
 
-    # TODO: What do we use for "session" here?
-    resp = session.post(
-        urljoin(SERVER_URL, "/api/login"),
-        data=dict(deviceId=deviceId, secret=secret, deviceInfo=json.dumps(deviceInfo))
-    )
+    async def _login(loop):
+        data = {'deviceId': deviceId,
+                'secret': secret,
+                'deviceInfo': json.dumps(deviceInfo)}
 
-    if resp.status_code == 404:
-        resp = session.post(
-            urljoin(SERVER_URL, "/api/register"),
-            data=dict(deviceId=deviceId, secret=secret, deviceInfo=json.dumps(deviceInfo))
-        )
+        login_url = urljoin(SERVER_URL, "/api/login")
+        register_url = urljoin(SERVER_URL, "/api/register")
 
-    resp.raise_for_status()
+        async with ClientSession(loop=loop) as session:
+            async with session.post(login_url, data=data) as resp:
+                if resp.status == 404:
+                    async with session.post(register_url, data=data) as resp:
+                        status = resp.status
+                else:
+                    status = resp.status
+
+        if status > 399:
+            raise AssertionError("Could not login or register")
+        return resp.cookies
+
+    _COOKIES = run_in_fresh_loop(_login)
+    return {'cookies': _COOKIES}
+
+
+@setup()
+async def setup_worker(worker_id, args):
+    return {'cookies': _COOKIES}
 
 
 @global_teardown()
-def logout():
-    print("logout/delete_account")
-    # delete_account()
+def _logout():
+    async def logout(loop):
+        delete_url = urljoin(SERVER_URL, "/leave-page-shot/leave")
+        async with ClientSession(cookies=_COOKIES, loop=loop) as session:
+            async with session.post(delete_url, data={}) as resp:
+                assert resp.status < 400
+
+    run_in_fresh_loop(logout)
 
 
 @scenario(100)
 async def create_shot(session):
     path_pageshot = urljoin(SERVER_URL, "data/" + make_uuid() + "/test.com")
     data = make_example_shot()
+    async with session.put(path_pageshot, data=data) as r:
+        assert r.status < 400
 
-    try:
-        async with session.put(path_pageshot, data=data) as r:
-            body = await r.text()
-            print("....." + body + "........")
 
-    except Exception as e:
-        print(e)
+def run_in_fresh_loop(coro):
+    loop = asyncio.new_event_loop()
+    task = loop.create_task(coro(loop))
+    res = loop.run_until_complete(task)
+    loop.close()
+    return res
