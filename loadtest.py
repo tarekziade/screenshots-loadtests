@@ -1,9 +1,10 @@
+import json
 import os
 import random
 import time
 import uuid
 from urllib.parse import urljoin
-from molotov import scenario
+from molotov import scenario, global_setup, global_teardown
 
 # Read configuration from env
 SERVER_URL = os.getenv(
@@ -21,7 +22,16 @@ with open(filename) as f:
 def make_uuid():
     return str(uuid.uuid1()).replace("-", "")
 
+
+def make_device_info():
+    return dict(
+        addonVersion='0.1.2014test',
+        platform='test',
+    )
+
+deviceInfo = make_device_info()
 deviceId = make_uuid()
+secret = make_uuid()
 
 
 def make_example_shot():
@@ -67,23 +77,40 @@ Example strings like apple orange banana some stuff like whatever and whoever an
 """.split()
 
 
+@global_setup()
+def login(args):
+    print("Kenny Loggins")
+
+    # TODO: What do we use for "session" here?
+    resp = session.post(
+        urljoin(SERVER_URL, "/api/login"),
+        data=dict(deviceId=deviceId, secret=secret, deviceInfo=json.dumps(deviceInfo))
+    )
+
+    if resp.status_code == 404:
+        resp = session.post(
+            urljoin(SERVER_URL, "/api/register"),
+            data=dict(deviceId=deviceId, secret=secret, deviceInfo=json.dumps(deviceInfo))
+        )
+
+    resp.raise_for_status()
+
+
+@global_teardown()
+def logout():
+    print("logout/delete_account")
+    # delete_account()
+
+
 @scenario(100)
 async def create_shot(session):
-
-    # async with session.put(SERVER_URL + STATUS_URL) as r:
-    #     body = await r.json()
-    #     assert 'user' in body
-
     path_pageshot = urljoin(SERVER_URL, "data/" + make_uuid() + "/test.com")
     data = make_example_shot()
 
-    headers = {'Content-Type': 'application/json', 'Accept': 'text/plain'}
-
     try:
-        async with session.put(path_pageshot, data=data, headers=headers) as r:
-            body = await r.json()
-            print(body)
-    except Exception as exc:
-        print(exc)
-    else:
-        print('¯\_(ツ)_/¯')
+        async with session.put(path_pageshot, data=data) as r:
+            body = await r.text()
+            print("....." + body + "........")
+
+    except Exception as e:
+        print(e)
