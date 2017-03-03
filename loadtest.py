@@ -15,12 +15,13 @@ SERVER_URL = os.getenv(
     'URL_PAGESHOT',
     "https://pageshot.stage.mozaws.net").rstrip('/')
 
-example_images = {}
-filename = './exercise_images.py'
 
-with open(filename) as f:
-    exec(f.read(), example_images)
-    example_images = example_images["example_images"]
+def get_example_images():
+    example_images = {}
+    with open('./exercise_images.py') as f:
+        exec(f.read(), example_images)
+        example_images = example_images["example_images"]
+    return example_images
 
 
 def make_uuid():
@@ -32,14 +33,14 @@ def make_device_info():
         addonVersion='0.1.2014test',
         platform='test')
 
-
+exampleImages = get_example_images()
 deviceInfo = make_device_info()
 deviceId = make_uuid()
 secret = make_uuid()
 
 
 def make_example_shot():
-    image = random.choice(example_images)
+    image = random.choice(exampleImages)
     text = []
     for i in range(10):
         text.append(random.choice(text_strings))
@@ -120,21 +121,23 @@ async def setup_worker(worker_id, args):
 
 
 @global_teardown()
-def _logout():
-    async def logout(loop):
+def logout():
+    async def _logout(loop):
         delete_url = urljoin(SERVER_URL, "/leave-page-shot/leave")
         async with ClientSession(cookies=_COOKIES, loop=loop) as session:
             async with session.post(delete_url, data={}) as resp:
                 assert resp.status < 400
 
-    run_in_fresh_loop(logout)
+    run_in_fresh_loop(_logout)
 
 
 @scenario(100)
 async def create_shot(session):
     path_pageshot = urljoin(SERVER_URL, "data/" + make_uuid() + "/test.com")
     data = make_example_shot()
-    async with session.put(path_pageshot, data=data) as r:
+    headers = {'content-type': 'application/json'}
+
+    async with session.put(path_pageshot, data=json.dumps(data), headers=headers) as r:
         assert r.status < 400
 
 
@@ -144,3 +147,6 @@ def run_in_fresh_loop(coro):
     res = loop.run_until_complete(task)
     loop.close()
     return res
+
+print(make_example_shot())
+
