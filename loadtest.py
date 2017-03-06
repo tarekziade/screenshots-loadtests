@@ -33,6 +33,7 @@ def make_device_info():
         addonVersion='0.1.2014test',
         platform='test')
 
+
 exampleImages = get_example_images()
 deviceInfo = make_device_info()
 deviceId = make_uuid()
