@@ -4,11 +4,11 @@ python:
   - "3.6"
 
 before_install:
-    - pip install pep8
+    - pip install pycodestyle
 
 install:
   - "pip install -r requirements.txt"
 
 script:
   - molotov --version
-  - pep8 *.py
+  - pycodestyle *.py
