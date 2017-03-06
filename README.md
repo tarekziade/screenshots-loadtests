@@ -1,5 +1,7 @@
 # Page Shot Load Tests
 
+[![Build Status](https://travis-ci.org/pdehaan/pageshot-loadtests.svg?branch=master)](https://travis-ci.org/pdehaan/pageshot-loadtests)
+
 Async [**Page Shot**](https://github.com/mozilla-services/pageshot) load tests using [**molotov**](https://github.com/loads/molotov).
 
 ## Requirements:
