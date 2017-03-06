@@ -147,6 +147,3 @@ def run_in_fresh_loop(coro):
     res = loop.run_until_complete(task)
     loop.close()
     return res
-
-print(make_example_shot())
-
