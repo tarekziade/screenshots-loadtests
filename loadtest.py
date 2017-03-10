@@ -4,16 +4,7 @@ import sys; sys.path.append('.')
 import json
 from urllib.parse import urljoin
 
-from utils import (
-    SERVER_URL,
-    do_login,
-    do_logout,
-    do_setup_worker,
-    get_example_images,
-    make_device_info,
-    make_example_shot,
-    make_uuid,
-)
+import utils
 
 from molotov import (
     scenario,
@@ -25,24 +16,29 @@ from molotov import (
 
 @global_setup()
 def login(args):
-    return do_login(args)
+    return utils.login(args)
 
 
 @setup()
 async def setup_worker(worker_id, args):
-    return do_setup_worker(worker_id, args)
+    return utils.setup_worker(worker_id, args)
 
 
 @global_teardown()
 def logout():
-    return do_logout()
+    return utils.logout()
 
 
 @scenario(100)
 async def create_shot(session):
-    path_pageshot = urljoin(SERVER_URL, "data/{}/test.com".format(make_uuid()))
-    data = make_example_shot()
-    headers = {'content-type': 'application/json'}
+    res = await utils.create_shot(session)
+    assert res.status < 400
 
-    async with session.put(path_pageshot, data=json.dumps(data), headers=headers) as r:
-        assert r.status < 400
+
+@scenario(100)
+async def read_shot(session):
+    shot = await utils.create_shot(session)
+    assert shot.status < 400
+
+    res = await utils.read_shot(session, shot.path)
+    assert res.status < 400

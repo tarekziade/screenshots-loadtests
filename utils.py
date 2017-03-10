@@ -22,6 +22,9 @@ Example strings like apple orange banana some stuff like whatever and whoever
 
 
 def get_example_images():
+    """
+    Load a set of example images from disk.
+    """
     example_images = {}
     with open('./exercise_images.py') as f:
         exec(f.read(), example_images)
@@ -30,6 +33,9 @@ def get_example_images():
 
 
 def get_random_text(word_count):
+    """
+    Create a random word jumble based on the specified word count.
+    """
     text = []
     for i in range(word_count):
         text.append(random.choice(text_strings))
@@ -37,12 +43,18 @@ def get_random_text(word_count):
 
 
 def make_device_info():
+    """
+    Create some dummy device info.
+    """
     return dict(
         addonVersion='0.1.2014test',
         platform='test')
 
 
 def make_example_shot():
+    """
+    Create a dummy JSON payload of shot data.
+    """
     image = random.choice(exampleImages)
     return dict(
         deviceId=deviceId,
@@ -78,10 +90,16 @@ def make_example_shot():
 
 
 def make_uuid():
+    """
+    Create a random UUID.
+    """
     return str(uuid.uuid1()).replace("-", "")
 
 
 def run_in_fresh_loop(coro):
+    """
+    Create a new async event loop.
+    """
     loop = asyncio.new_event_loop()
     task = loop.create_task(coro(loop))
     res = loop.run_until_complete(task)
@@ -89,10 +107,13 @@ def run_in_fresh_loop(coro):
     return res
 
 
-def do_login(args):
+def login(args):
+    """
+    Log in or register a new Page Shot "account".
+    """
     global _COOKIES
 
-    async def login(loop):
+    async def _login(loop):
         data = {'deviceId': deviceId,
                 'secret': secret,
                 'deviceInfo': json.dumps(deviceInfo)}
@@ -112,22 +133,50 @@ def do_login(args):
             raise AssertionError("Could not login or register")
         return resp.cookies
 
-    _COOKIES = run_in_fresh_loop(login)
+    _COOKIES = run_in_fresh_loop(_login)
     return {'cookies': _COOKIES}
 
 
-def do_logout():
-    async def logout(loop):
+def logout():
+    """
+    Delete your Page Shot "account" and delete all your stored images (if any).
+    """
+    async def _logout(loop):
         delete_url = urljoin(SERVER_URL, "/leave-page-shot/leave")
         async with ClientSession(cookies=_COOKIES, loop=loop) as session:
             async with session.post(delete_url, data={}) as resp:
                 assert resp.status < 400
 
-    run_in_fresh_loop(logout)
+    run_in_fresh_loop(_logout)
 
 
-def do_setup_worker(worker_id, args):
+def setup_worker(worker_id, args):
     return {'cookies': _COOKIES}
+
+
+async def create_shot(session):
+    """
+    Create/upload a new Page Shot shot.
+    """
+    path = "data/{}/test.com".format(make_uuid())
+    path_pageshot = urljoin(SERVER_URL, path)
+    data = make_example_shot()
+    headers = {'content-type': 'application/json'}
+
+    async with session.put(path_pageshot, data=json.dumps(data), headers=headers) as r:
+        r.path = path
+        return r
+
+
+async def read_shot(session, path):
+    """
+    Read a shot, given a specific URL fragment (for example: "data/{UUID}/test.com")
+    """
+    path_pageshot = urljoin(SERVER_URL, path)
+    headers = {'content-type': 'application/json'}
+
+    async with session.get(path_pageshot, data={}, headers=headers) as r:
+        return r
 
 
 _COOKIES = None
