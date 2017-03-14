@@ -154,11 +154,19 @@ def setup_worker(worker_id, args):
     return {'cookies': _COOKIES}
 
 
-async def create_shot(session):
+_SHOTS = []
+
+
+async def create_shot(session=None):
     """
     Create/upload a new Page Shot shot.
     """
+    if session is None:
+        session = ClientSession(cookies=_COOKIES)
+
     path = "data/{}/test.com".format(make_uuid())
+    if path not in _SHOTS:
+        _SHOTS.append(path)
     path_pageshot = urljoin(SERVER_URL, path)
     data = make_example_shot()
     headers = {'content-type': 'application/json'}
@@ -168,10 +176,16 @@ async def create_shot(session):
         return r
 
 
-async def read_shot(session, path):
+async def read_shot(session=None, path=None):
     """
     Read a shot, given a specific URL fragment (for example: "data/{UUID}/test.com")
     """
+    if session is None:
+        session = ClientSession(cookies=_COOKIES)
+
+    if path is None:
+        path = _SHOTS[-1]
+
     path_pageshot = urljoin(SERVER_URL, path)
     headers = {'content-type': 'application/json'}
 
