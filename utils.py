@@ -55,16 +55,16 @@ def make_example_shot(keywords=None):
     Create a dummy JSON payload of shot data.
     """
     image = random.choice(exampleImages)
-    text = get_random_text(10)
+    docTitle = "Load test page"
     if keywords:
-        text += " " + keywords
+        docTitle += " " + keywords
 
-    print("creating... " + text)
+    print("creating... " + docTitle)
 
     return dict(
         deviceId=deviceId,
         url="http://test.com/?" + make_uuid(),
-        docTitle="Load test page",
+        docTitle=docTitle,
         createdDate=int(time.time() * 1000),
         favicon=None,
         siteName="test site",
@@ -77,7 +77,7 @@ def make_example_shot(keywords=None):
                 image=dict(
                     url=image["url"],
                     captureType="selection",
-                    text=text,
+                    text=get_random_text(10),
                     location=dict(
                         top=100,
                         left=100,
@@ -230,9 +230,8 @@ async def search_shots(session=None, query=None):
     """
     Search a list of shots (as JSON).
     """
-    path = "shots?data=json&q=" + query
+    path = "shots?q=" + query + "&data=json"
     path_pageshot = urljoin(SERVER_URL, path)
-    print(path_pageshot)
     headers = {'content-type': 'application/json', 'accept': 'application/json, */*'}
 
     async with session.get(path_pageshot, data={}, headers=headers) as r:

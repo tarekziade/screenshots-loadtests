@@ -12,11 +12,12 @@ from molotov import (
     setup,
 )
 
-NUM_SAMPLE_SHOTS = random.randint(4, 4)
+NUM_SAMPLE_SHOTS = random.randint(4, 7)
+NUM_SEARCH_HITS = 2
 
 
 @global_setup()
-def login(args):
+def login_and_create_shots(args):
     async def _create_shot(_):
         return await utils.create_shot()
 
@@ -27,14 +28,14 @@ def login(args):
 
     # Upload X sample shots.
     for x in range(NUM_SAMPLE_SHOTS):
-        if (x >= 2):
+        if (x < NUM_SEARCH_HITS):
             res = utils.run_in_fresh_loop(_create_shot_w_keywords)
             assert res.status < 400
         else:
             res = utils.run_in_fresh_loop(_create_shot)
             assert res.status < 400
 
-    time.sleep(5)  # delays for 5 seconds
+    time.sleep(1)  # delays for 1 seconds
 
     return _login
 
@@ -54,22 +55,12 @@ async def list_shots(session):
     res = await utils.list_shots(session)
 
     assert res.status == 200
-
-    for shot in res.bod["shots"]:
-        clips = shot["json"]["clips"]
-        for attr in clips:
-            print(clips[attr]["image"]["text"])
+    assert len(res.bod["shots"]) == NUM_SAMPLE_SHOTS
 
 
-@scenario(100)
+@scenario(10)
 async def search_shots(session):
     res = await utils.search_shots(session, "HIT")
 
     assert res.status == 200
-
-    print(res.bod)
-
-    for shot in res.bod["shots"]:
-        clips = shot["json"]["clips"]
-        for attr in clips:
-            print(clips[attr]["image"]["text"])
+    assert len(res.bod["shots"]) == NUM_SEARCH_HITS
