@@ -50,15 +50,21 @@ def make_device_info():
         platform='test')
 
 
-def make_example_shot():
+def make_example_shot(keywords=None):
     """
     Create a dummy JSON payload of shot data.
     """
     image = random.choice(exampleImages)
+    docTitle = "Load test page"
+    if keywords:
+        docTitle += " " + keywords
+
+    print("creating... " + docTitle)
+
     return dict(
         deviceId=deviceId,
         url="http://test.com/?" + make_uuid(),
-        docTitle="Load test page",
+        docTitle=docTitle,
         createdDate=int(time.time() * 1000),
         favicon=None,
         siteName="test site",
@@ -153,7 +159,7 @@ def setup_worker(worker_id, args):
     return {'cookies': _COOKIES}
 
 
-async def create_shot(session=None, loop=None):
+async def create_shot(session=None, loop=None, keywords=None):
     """
     Create/upload a new Page Shot shot.
     """
@@ -170,7 +176,7 @@ async def create_shot(session=None, loop=None):
             _SHOTS.append(path)
 
         path_pageshot = urljoin(SERVER_URL, path)
-        data = make_example_shot()
+        data = make_example_shot(keywords=keywords)
         headers = {'content-type': 'application/json'}
 
         async with session.put(path_pageshot, data=json.dumps(data),
@@ -206,6 +212,31 @@ async def read_shot(session=None, path=None, loop=None):
         if fresh_session:
             session.close()
 
+
+async def list_shots(session=None):
+    """
+    Retrieve a list of shots (as JSON).
+    """
+    path = "shots?data=json"
+    path_pageshot = urljoin(SERVER_URL, path)
+    headers = {'content-type': 'application/json', 'accept': 'application/json, */*'}
+
+    async with session.get(path_pageshot, data={}, headers=headers) as r:
+        r.bod = await r.json()
+        return r
+
+
+async def search_shots(session=None, query=None):
+    """
+    Search a list of shots (as JSON).
+    """
+    path = "shots?q=" + query + "&data=json"
+    path_pageshot = urljoin(SERVER_URL, path)
+    headers = {'content-type': 'application/json', 'accept': 'application/json, */*'}
+
+    async with session.get(path_pageshot, data={}, headers=headers) as r:
+        r.bod = await r.json()
+        return r
 
 
 _COOKIES = None
