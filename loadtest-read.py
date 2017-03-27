@@ -44,4 +44,3 @@ async def read_shot(session):
     res = await utils.read_shot(session, SHOT)
     await res.json()
     assert res.status == 200
-    print("....", res)
