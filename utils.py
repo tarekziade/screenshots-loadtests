@@ -59,8 +59,6 @@ def make_example_shot(keywords=None):
     if keywords:
         docTitle += " " + keywords
 
-    print("creating... " + docTitle)
-
     return dict(
         deviceId=deviceId,
         url="http://test.com/?" + make_uuid(),

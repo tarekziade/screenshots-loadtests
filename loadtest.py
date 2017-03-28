@@ -2,6 +2,7 @@
 import sys; sys.path.append('.')
 
 import json
+import os
 from urllib.parse import urljoin
 
 import utils
@@ -12,6 +13,9 @@ from molotov import (
     global_teardown,
     setup,
 )
+
+WEIGHT_CREATE_SHOT = int(os.getenv('WEIGHT_CREATE_SHOT', 0))
+WEIGHT_READ_SHOT = int(os.getenv('WEIGHT_READ_SHOT', 0))
 
 
 @global_setup()
@@ -29,13 +33,13 @@ def logout():
     return utils.logout()
 
 
-@scenario(100)
+@scenario(WEIGHT_CREATE_SHOT)
 async def create_shot(session):
     res = await utils.create_shot(session)
     assert res.status < 400
 
 
-@scenario(100)
+@scenario(WEIGHT_READ_SHOT)
 async def read_shot(session):
     shot = await utils.create_shot(session)
     assert shot.status < 400

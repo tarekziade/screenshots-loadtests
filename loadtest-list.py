@@ -1,6 +1,7 @@
 # This is needed for doing the "from utils import (...)" below.
 import sys; sys.path.append('.')
 
+import os
 import random
 import time
 import utils
@@ -14,6 +15,9 @@ from molotov import (
 
 NUM_SAMPLE_SHOTS = random.randint(4, 7)
 NUM_SEARCH_HITS = 2
+
+WEIGHT_LIST_SHOTS = int(os.getenv('WEIGHT_LIST_SHOTS', 0))
+WEIGHT_SEARCH_SHOTS = int(os.getenv('WEIGHT_SEARCH_SHOTS', 0))
 
 
 @global_setup()
@@ -50,7 +54,7 @@ def logout():
     return utils.logout()
 
 
-@scenario(0)
+@scenario(WEIGHT_LIST_SHOTS)
 async def list_shots(session):
     res = await utils.list_shots(session)
 
@@ -58,7 +62,7 @@ async def list_shots(session):
     assert len(res.bod["shots"]) == NUM_SAMPLE_SHOTS
 
 
-@scenario(10)
+@scenario(WEIGHT_SEARCH_SHOTS)
 async def search_shots(session):
     res = await utils.search_shots(session, "HIT")
 
