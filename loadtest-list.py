@@ -16,8 +16,8 @@ from molotov import (
 NUM_SAMPLE_SHOTS = random.randint(4, 7)
 NUM_SEARCH_HITS = 2
 
-WEIGHT_LIST_SHOTS = int(os.getenv('WEIGHT_LIST_SHOTS', 0))
-WEIGHT_SEARCH_SHOTS = int(os.getenv('WEIGHT_SEARCH_SHOTS', 0))
+WEIGHT_LIST_SHOTS = int(os.getenv('WEIGHT_LIST_SHOTS') or '0')
+WEIGHT_SEARCH_SHOTS = int(os.getenv('WEIGHT_SEARCH_SHOTS') or '0')
 
 
 @global_setup()

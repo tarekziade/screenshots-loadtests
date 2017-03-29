@@ -14,8 +14,8 @@ from molotov import (
     setup,
 )
 
-WEIGHT_CREATE_SHOT = int(os.getenv('WEIGHT_CREATE_SHOT', 0))
-WEIGHT_READ_SHOT = int(os.getenv('WEIGHT_READ_SHOT', 0))
+WEIGHT_CREATE_SHOT = int(os.getenv('WEIGHT_CREATE_SHOT') or '0')
+WEIGHT_READ_SHOT = int(os.getenv('WEIGHT_READ_SHOT') or '0')
 
 
 @global_setup()
@@ -39,10 +39,10 @@ async def create_shot(session):
     assert res.status < 400
 
 
-@scenario(WEIGHT_READ_SHOT)
-async def read_shot(session):
-    shot = await utils.create_shot(session)
-    assert shot.status < 400
+# @scenario(WEIGHT_READ_SHOT)
+# async def read_shot(session):
+#     shot = await utils.create_shot(session)
+#     assert shot.status < 400
 
-    res = await utils.read_shot(session, shot.path)
-    assert res.status < 400
+#     res = await utils.read_shot(session, shot.path)
+#     assert res.status < 400
