@@ -12,7 +12,7 @@ import asyncio
 # Read configuration from env
 SERVER_URL = os.getenv(
     'URL_PAGESHOT',
-    'https://pageshot.stage.mozaws.net').rstrip('/')
+    'https://screenshots.stage.mozaws.net').rstrip('/')
 
 text_strings = """\
 Example strings like apple orange banana some stuff like whatever and whoever
