@@ -1,0 +1,87 @@
+{
+  "name": "Screenshots Load Testing",
+  "plans": [
+
+    {
+      "name": "Loadtest",
+      "description": "Loadtest",
+      "steps": [
+        {
+          "name": "*********************** RUN #01 *************************",
+          "instance_count": 2,
+          "instance_region": "us-east-1",
+          "instance_type": "m3.medium",
+          "run_max_time": 300,
+          "container_name": "firefoxtesteng/screenshots-loadtests:latest",
+          "environment_data": [
+            "URL_SERVER=https://screenshots.stage.mozaws.net",
+            "TEST_CONNECTIONS=1",
+            "TEST_PROCESSES=1",
+            "TEST_DURATION=300",
+            "TEST_MODULE=loadtest-list.py",
+            "WEIGHT_LIST_SHOTS=1"
+          ],
+          "volume_mapping": "/var/log:/var/log/:rw",
+          "docker_series": "screenshots-loadtests"
+        },
+        {
+          "name": "*********************** RUN #02 *************************",
+          "run_delay": 330,
+          "instance_count": 12, 
+          "instance_region": "us-east-1",
+          "instance_type": "m3.medium",
+          "run_max_time": 300,
+          "container_name": "firefoxtesteng/screenshots-loadtests:latest",
+          "environment_data": [
+            "URL_SERVER=https://screenshots.stage.mozaws.net",
+            "TEST_CONNECTIONS=1",
+            "TEST_PROCESSES=1",
+            "TEST_DURATION=300",
+            "TEST_MODULE=loadtest-list.py",
+            "WEIGHT_LIST_SHOTS=1"
+          ],
+          "volume_mapping": "/var/log:/var/log/:rw",
+          "docker_series": "screenshots-loadtests"
+        },
+        {
+          "name": "*********************** RUN #03 *************************",
+          "run_delay": 660,
+          "instance_count": 22,
+          "instance_region": "us-east-1",
+          "instance_type": "m3.medium",
+          "run_max_time": 300,
+          "container_name": "firefoxtesteng/screenshots-loadtests:latest",
+          "environment_data": [
+            "URL_SERVER=https://screenshots.stage.mozaws.net",
+            "TEST_CONNECTIONS=1",
+            "TEST_PROCESSES=1",
+            "TEST_DURATION=300",
+            "TEST_MODULE=loadtest-list.py",
+            "WEIGHT_LIST_SHOTS=1"
+          ],
+          "volume_mapping": "/var/log:/var/log/:rw",
+          "docker_series": "screenshots-loadtests"
+        },
+        {
+          "name": "*********************** RUN #04 *************************",
+          "run_delay": 990,
+          "instance_count": 32,
+          "instance_region": "us-east-1",
+          "instance_type": "m3.medium",
+          "run_max_time": 300,
+          "container_name": "firefoxtesteng/screenshots-loadtests:latest",
+          "environment_data": [
+            "URL_SERVER=https://screenshots.stage.mozaws.net",
+            "TEST_CONNECTIONS=1",
+            "TEST_PROCESSES=1",
+            "TEST_DURATION=300",
+            "TEST_MODULE=loadtest-list.py",
+            "WEIGHT_LIST_SHOTS=1"
+          ],
+          "volume_mapping": "/var/log:/var/log/:rw",
+          "docker_series": "screenshots-loadtests"
+        }
+      ]
+    }
+  ]
+}
