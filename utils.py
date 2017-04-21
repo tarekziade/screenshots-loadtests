@@ -112,7 +112,7 @@ def run_in_fresh_loop(coro):
 
 def login(args):
     """
-    Log in or register a new Page Shot "account".
+    Log in or register a new Screenshots "account".
     """
     global _COOKIES
 
@@ -142,10 +142,10 @@ def login(args):
 
 def logout():
     """
-    Delete your Page Shot "account" and delete all your stored images (if any).
+    Delete your Screenshots "account" and delete all your stored images (if any).
     """
     async def _logout(loop):
-        delete_url = urljoin(SERVER_URL, "/leave-page-shot/leave")
+        delete_url = urljoin(SERVER_URL, "/leave-screenshots/leave")
         async with ClientSession(cookies=_COOKIES, loop=loop) as session:
             async with session.post(delete_url, data={}) as resp:
                 assert resp.status < 400
