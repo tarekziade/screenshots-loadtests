@@ -11,7 +11,7 @@ import asyncio
 
 # Read configuration from env
 SERVER_URL = os.getenv(
-    'URL_PAGESHOT',
+    'URL_SERVER',
     'https://screenshots.stage.mozaws.net').rstrip('/')
 
 text_strings = """\
@@ -112,7 +112,7 @@ def run_in_fresh_loop(coro):
 
 def login(args):
     """
-    Log in or register a new Page Shot "account".
+    Log in or register a new Screenshots "account".
     """
     global _COOKIES
 
@@ -142,10 +142,10 @@ def login(args):
 
 def logout():
     """
-    Delete your Page Shot "account" and delete all your stored images (if any).
+    Delete your Screenshots "account" and delete all your stored images (if any).
     """
     async def _logout(loop):
-        delete_url = urljoin(SERVER_URL, "/leave-page-shot/leave")
+        delete_url = urljoin(SERVER_URL, "/leave-screenshots/leave")
         async with ClientSession(cookies=_COOKIES, loop=loop) as session:
             async with session.post(delete_url, data={}) as resp:
                 assert resp.status < 400
@@ -173,11 +173,11 @@ async def create_shot(session=None, loop=None, keywords=None):
         if path not in _SHOTS:
             _SHOTS.append(path)
 
-        path_pageshot = urljoin(SERVER_URL, path)
+        path_screenshots = urljoin(SERVER_URL, path)
         data = make_example_shot(keywords=keywords)
         headers = {'content-type': 'application/json'}
 
-        async with session.put(path_pageshot, data=json.dumps(data),
+        async with session.put(path_screenshots, data=json.dumps(data),
                                headers=headers) as r:
             r.path = path
             r.session = session
@@ -201,10 +201,10 @@ async def read_shot(session=None, path=None, loop=None):
         if path is None:
             path = _SHOTS[-1]
 
-        path_pageshot = urljoin(SERVER_URL, path)
+        path_screenshots = urljoin(SERVER_URL, path)
         headers = {'content-type': 'application/json'}
 
-        async with session.get(path_pageshot, headers=headers) as resp:
+        async with session.get(path_screenshots, headers=headers) as resp:
             return resp
     finally:
         if fresh_session:
@@ -216,10 +216,10 @@ async def list_shots(session=None):
     Retrieve a list of shots (as JSON).
     """
     path = "shots?data=json"
-    path_pageshot = urljoin(SERVER_URL, path)
+    path_screenshots = urljoin(SERVER_URL, path)
     headers = {'content-type': 'application/json', 'accept': 'application/json, */*'}
 
-    async with session.get(path_pageshot, data={}, headers=headers) as r:
+    async with session.get(path_screenshots, data={}, headers=headers) as r:
         r.bod = await r.json()
         return r
 
@@ -229,10 +229,10 @@ async def search_shots(session=None, query=None):
     Search a list of shots (as JSON).
     """
     path = "shots?q=" + query + "&data=json"
-    path_pageshot = urljoin(SERVER_URL, path)
+    path_screenshots = urljoin(SERVER_URL, path)
     headers = {'content-type': 'application/json', 'accept': 'application/json, */*'}
 
-    async with session.get(path_pageshot, data={}, headers=headers) as r:
+    async with session.get(path_screenshots, data={}, headers=headers) as r:
         r.bod = await r.json()
         return r
 
