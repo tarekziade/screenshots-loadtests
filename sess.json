@@ -1,0 +1,41 @@
+{
+    "__meta__": {
+        "about": "HTTPie session file",
+        "help": "https://github.com/jkbrzt/httpie#sessions",
+        "httpie": "0.9.6"
+    },
+    "auth": {
+        "password": null,
+        "type": null,
+        "username": null
+    },
+    "cookies": {
+        "abtests": {
+            "expires": null,
+            "path": "/",
+            "secure": true,
+            "value": "eyJoaWdobGlnaHRCdXR0b25Pbkluc3RhbGwiOnsidmFsdWUiOiJjb250cm9sIiwiZ2FGaWVsZCI6ImNkMyIsInZlcnNpb24iOjF9LCJzdHlsZU15U2hvdHNCdXR0b24iOnsidmFsdWUiOiJjb250cm9sIiwiZ2FGaWVsZCI6ImNkNCIsInZlcnNpb24iOjF9LCJhdXRvT3BlblNoYXJlUGFuZWwiOnsidmFsdWUiOiJjb250cm9sIiwiZ2FGaWVsZCI6ImNkNSIsInZlcnNpb24iOjEsInNob3RGaWVsZCI6ImNkNiJ9fQ=="
+        },
+        "abtests.sig": {
+            "expires": null,
+            "path": "/",
+            "secure": true,
+            "value": "RaLSzsm7ATg732SFBD0t8KvwrBU"
+        },
+        "user": {
+            "expires": null,
+            "path": "/",
+            "secure": true,
+            "value": "12345678901234561234567890123456"
+        },
+        "user.sig": {
+            "expires": null,
+            "path": "/",
+            "secure": true,
+            "value": "juUECilNYMk1y7yYGRISWkfbJ3U"
+        }
+    },
+    "headers": {
+        "Accept": "application/json, */*"
+    }
+}

@@ -99,6 +99,10 @@ def make_uuid():
     return str(uuid.uuid1()).replace("-", "")
 
 
+def make_random_id():
+    return make_uuid()[:16]
+
+
 def run_in_fresh_loop(coro):
     """
     Create a new async event loop.
@@ -168,7 +172,7 @@ async def create_shot(session=None, loop=None, keywords=None):
         fresh_session = False
 
     try:
-        path = "data/{}/test.com".format(make_uuid())
+        path = "data/{}/test.com".format(make_random_id())
 
         if path not in _SHOTS:
             _SHOTS.append(path)
