@@ -59,6 +59,11 @@ docker-build:
 docker-run:
 	bash -c "docker run -e URL_SERVER=$(URL_SERVER) -e WEIGHT_LIST_SHOTS=$(WEIGHT_LIST_SHOTS) -e WEIGHT_SEARCH_SHOTS=$(WEIGHT_SEARCH_SHOTS) -e WEIGHT_CREATE_SHOT=$(WEIGHT_CREATE_SHOT) -e WEIGHT_READ_SHOT=$(WEIGHT_READ_SHOT) -e TEST_PROCESSES=$(TEST_PROCESSES) -e TEST_DURATION=$(TEST_DURATION) -e TEST_CONNECTIONS=$(TEST_CONNECTIONS) -e VERBOSE=$(VERBOSE) firefoxtesteng/$(PROJECT)-loadtests"
 
+docker-test: docker-run
+
+docker-push:
+	docker push "$(PROJECT)/loadtest:latest"
+
 docker-export:
 	docker save "$(PROJECT)/loadtest:latest" | bzip2> "$(PROJECT)-latest.tar.bz2"
 
