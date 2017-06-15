@@ -1,0 +1,196 @@
+{ 
+  "ecs_name": "screenshots-loadtests-pdehaan", 
+  "name": "Loadtest", 
+  "description": "screenshots-loadtest", 
+  "metrics_options": { 
+    "enabled": true, 
+    "dashboard": { 
+      "admin_user": "admin", 
+      "admin_password": "testing", 
+      "name": "molotov-screenshots", 
+      "filename": "gf_basic_dashboard.json" 
+    } 
+  }, 
+  "steps": [ 
+    { 
+      "name": "STEP01", 
+      "cmd": "molotov -c -p 1 -d 300 -w 10 loadtest.py", 
+      "instance_count": 2, 
+      "instance_type": "m3.medium", 
+      "run_max_time": 300, 
+      "container_name": "firefoxtesteng/screenshots-loadtests:latest", 
+      "env": { 
+        "URL_SERVER": "https://screenshots.stage.mozaws.net", 
+        "TEST_CONNECTIONS": "1",
+        "TEST_PROCESSES": "1",
+        "TEST_DURATION": "300",
+        "TEST_MODULE": "loadtest.py",
+        "WEIGHT_CREATE_SHOT": "1"
+      }, 
+      "docker_series": "screenshots_tests" 
+    },
+    { 
+      "name": "STEP02", 
+      "cmd": "molotov -c -p 1 -d 300 -w 10 loadtest.py", 
+      "instance_count": 12, 
+      "instance_type": "m3.medium", 
+      "run_max_time": 300, 
+      "run_delay": 330, 
+      "container_name": "firefoxtesteng/screenshots-loadtests:latest", 
+      "env": { 
+        "URL_SERVER": "https://screenshots.stage.mozaws.net", 
+        "TEST_CONNECTIONS": "1",
+        "TEST_PROCESSES": "1",
+        "TEST_DURATION": "300",
+        "TEST_MODULE": "loadtest.py",
+        "WEIGHT_CREATE_SHOT": "1"
+      }, 
+      "docker_series": "screenshots_tests" 
+    },
+    { 
+      "name": "STEP03", 
+      "cmd": "molotov -c -p 1 -d 300 -w 10 loadtest.py", 
+      "instance_count": 12, 
+      "instance_type": "m3.medium", 
+      "run_max_time": 300, 
+      "run_delay": 660, 
+      "container_name": "firefoxtesteng/screenshots-loadtests:latest", 
+      "env": { 
+        "URL_SERVER": "https://screenshots.stage.mozaws.net", 
+        "TEST_CONNECTIONS": "1",
+        "TEST_PROCESSES": "1",
+        "TEST_DURATION": "300",
+        "TEST_MODULE": "loadtest.py",
+        "WEIGHT_CREATE_SHOT": "1"
+      }, 
+      "docker_series": "screenshots_tests" 
+    },
+    { 
+      "name": "STEP04", 
+      "cmd": "molotov -c -p 1 -d 300 -w 10 loadtest.py", 
+      "instance_count": 12, 
+      "instance_type": "m3.medium", 
+      "run_max_time": 300, 
+      "run_delay": 990, 
+      "container_name": "firefoxtesteng/screenshots-loadtests:latest", 
+      "env": { 
+        "URL_SERVER": "https://screenshots.stage.mozaws.net", 
+        "TEST_CONNECTIONS": "1",
+        "TEST_PROCESSES": "1",
+        "TEST_DURATION": "300",
+        "TEST_MODULE": "loadtest.py",
+        "WEIGHT_CREATE_SHOT": "1"
+      }, 
+      "docker_series": "screenshots_tests" 
+    },
+    { 
+      "name": "STEP05", 
+      "cmd": "molotov -c -p 1 -d 300 -w 10 loadtest.py", 
+      "instance_count": 22, 
+      "instance_type": "m3.medium", 
+      "run_max_time": 300, 
+      "run_delay": 1320, 
+      "container_name": "firefoxtesteng/screenshots-loadtests:latest", 
+      "env": { 
+        "URL_SERVER": "https://screenshots.stage.mozaws.net", 
+        "TEST_CONNECTIONS": "1",
+        "TEST_PROCESSES": "1",
+        "TEST_DURATION": "300",
+        "TEST_MODULE": "loadtest.py",
+        "WEIGHT_CREATE_SHOT": "1"
+      }, 
+      "docker_series": "screenshots_tests" 
+    },
+    { 
+      "name": "STEP06", 
+      "cmd": "molotov -c -p 1 -d 300 -w 10 loadtest.py", 
+      "instance_count": 32, 
+      "instance_type": "m3.medium", 
+      "run_max_time": 300, 
+      "run_delay": 1650, 
+      "container_name": "firefoxtesteng/screenshots-loadtests:latest", 
+      "env": { 
+        "URL_SERVER": "https://screenshots.stage.mozaws.net", 
+        "TEST_CONNECTIONS": "1",
+        "TEST_PROCESSES": "1",
+        "TEST_DURATION": "300",
+        "TEST_MODULE": "loadtest.py",
+        "WEIGHT_CREATE_SHOT": "1"
+      }, 
+      "docker_series": "screenshots_tests" 
+    },
+    { 
+      "name": "STEP07", 
+      "cmd": "molotov -c -p 1 -d 300 -w 10 loadtest.py", 
+      "instance_count": 42, 
+      "instance_type": "m3.medium", 
+      "run_max_time": 300, 
+      "run_delay": 1980, 
+      "container_name": "firefoxtesteng/screenshots-loadtests:latest", 
+      "env": { 
+        "URL_SERVER": "https://screenshots.stage.mozaws.net", 
+        "TEST_CONNECTIONS": "1",
+        "TEST_PROCESSES": "1",
+        "TEST_DURATION": "300",
+        "TEST_MODULE": "loadtest.py",
+        "WEIGHT_CREATE_SHOT": "1"
+      }, 
+      "docker_series": "screenshots_tests" 
+    },
+    { 
+      "name": "STEP08", 
+      "cmd": "molotov -c -p 1 -d 300 -w 10 loadtest.py", 
+      "instance_count": 32, 
+      "instance_type": "m3.medium", 
+      "run_max_time": 300, 
+      "run_delay": 2310, 
+      "container_name": "firefoxtesteng/screenshots-loadtests:latest", 
+      "env": { 
+        "URL_SERVER": "https://screenshots.stage.mozaws.net", 
+        "TEST_CONNECTIONS": "1",
+        "TEST_PROCESSES": "1",
+        "TEST_DURATION": "300",
+        "TEST_MODULE": "loadtest.py",
+        "WEIGHT_CREATE_SHOT": "1"
+      }, 
+      "docker_series": "screenshots_tests" 
+    },
+    { 
+      "name": "STEP09", 
+      "cmd": "molotov -c -p 1 -d 300 -w 10 loadtest.py", 
+      "instance_count": 32, 
+      "instance_type": "m3.medium", 
+      "run_max_time": 300, 
+      "run_delay": 2640, 
+      "container_name": "firefoxtesteng/screenshots-loadtests:latest", 
+      "env": { 
+        "URL_SERVER": "https://screenshots.stage.mozaws.net", 
+        "TEST_CONNECTIONS": "1",
+        "TEST_PROCESSES": "1",
+        "TEST_DURATION": "300",
+        "TEST_MODULE": "loadtest.py",
+        "WEIGHT_CREATE_SHOT": "1"
+      }, 
+      "docker_series": "screenshots_tests" 
+    },
+    { 
+      "name": "STEP10", 
+      "cmd": "molotov -c -p 1 -d 300 -w 10 loadtest.py", 
+      "instance_count": 32, 
+      "instance_type": "m3.medium", 
+      "run_max_time": 300, 
+      "run_delay": 2970, 
+      "container_name": "firefoxtesteng/screenshots-loadtests:latest", 
+      "env": { 
+        "URL_SERVER": "https://screenshots.stage.mozaws.net", 
+        "TEST_CONNECTIONS": "1",
+        "TEST_PROCESSES": "1",
+        "TEST_DURATION": "300",
+        "TEST_MODULE": "loadtest.py",
+        "WEIGHT_CREATE_SHOT": "1"
+      }, 
+      "docker_series": "screenshots_tests" 
+    }
+  ] 
+} 
+
