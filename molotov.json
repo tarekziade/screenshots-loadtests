@@ -1,0 +1,18 @@
+{
+    "molotov": {
+        "requirements": "requirements.txt",
+        "env": {
+            "URL_SERVER": "https://screenshots.stage.mozaws.net"
+        },
+        "tests": {
+            "dogdriver": {
+                "duration": 300,
+                "processes": 1,
+                "workers": 1,
+                "scenario": "loadtest.py",
+                "console": true,
+                "verbose": 1
+            }
+        }
+    }
+}
