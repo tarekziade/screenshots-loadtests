@@ -2,7 +2,8 @@
     "molotov": {
         "requirements": "requirements.txt",
         "env": {
-            "URL_SERVER": "https://screenshots.stage.mozaws.net"
+            "URL_SERVER": "https://screenshots.stage.mozaws.net",
+            "WEIGHT_CREATE_SHOT": 10
         },
         "tests": {
             "dogdriver": {
